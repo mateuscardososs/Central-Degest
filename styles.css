@@ -240,8 +240,8 @@ body {
 /* Grade com quatro colunas fixas para os cards institucionais */
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 2rem;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
 }
 
 .card {

@@ -54,20 +54,21 @@
         <div class="container">
             <h3 class="section-title">Informações Institucionais</h3>
             <div class="cards-grid">
+
                 <div class="card" onclick="openModal('equipe-modal')">
                     <div class="card-icon">
                         <i data-lucide="users"></i>
                     </div>
                     <h4>Sobre a Equipe DEGEST</h4>
-                    <p>Conheça nossa equipe e estrutura organizacional</p>
+                    <p>Conheça nossa equipe e estrutura</p>
                 </div>
 
                 <div class="card" onclick="openModal('organograma-modal')">
                     <div class="card-icon">
-                        <i data-lucide="sitemap"></i>
+                        <i data-lucide="network"></i>
                     </div>
                     <h4>Organograma</h4>
-                    <p>Visualize a estrutura hierárquica da divisão</p>
+                    <p>Visualize a estrutura hierárquica</p>
                 </div>
 
                 <div class="card" onclick="openModal('sobre-modal')">
@@ -75,7 +76,7 @@
                         <i data-lucide="info"></i>
                     </div>
                     <h4>Sobre a Página</h4>
-                    <p>Entenda como navegar e utilizar esta central</p>
+                    <p>Entenda como navegar nesta central</p>
                 </div>
 
                 <div class="card" onclick="openModal('acoes-modal')">
@@ -83,8 +84,17 @@
                         <i data-lucide="book-open"></i>
                     </div>
                     <h4>Caderno de Ações</h4>
-                    <p>Acesse documentos e processos institucionais</p>
+                    <p>Acesse os documentos trimestrais</p>
                 </div>
+
+                <div class="card" onclick="openModal('processos-modal')">
+                    <div class="card-icon">
+                        <i data-lucide="workflow"></i>
+                    </div>
+                    <h4>Mapeamento de Processos</h4>
+                    <p>Acesse os fluxos e manuais BPM</p>
+                </div>
+
             </div>
         </div>
     </section>
@@ -152,7 +162,7 @@
                     <div class="highlight-icon">
                         <i data-lucide="target"></i>
                     </div>
-                    <h4>Reuniões co BI</h4>
+                    <h4>Reuniões com BI</h4>
                     <p>Quintas-feiras às 15h</p>
                     <span class="highlight-badge">Semanal</span>
                 </div>
@@ -189,10 +199,9 @@
             </button>
         </div>
         <div class="sidebar-content">
-            <iframe
-                src="https://trf5.atlassian.net/jira/core/projects/DAS/board?filter=assignee+%3D+%22712020%3Afe527b71-5827-406c-aeb3-be5efb9966bc%22&groupBy=status&atlOrigin=eyJpIjoiNDJmZTQxMDg2MmQ3NDAxYWFhODBiNDVkYzFiYjBjYWYiLCJwIjoiaiJ9"
-                frameborder="0" width="100%" height="100%">
+            <iframe src="https://trf5.atlassian.net/jira/core/projects/DAS" frameborder="0" width="100%" height="100%">
             </iframe>
+
 
             <div class="jira-fallback">
                 <p>O Kanban pode não carregar aqui. Acesse diretamente pelo botão:</p>
@@ -315,16 +324,48 @@
                     <div class="acao-item">
                         <i data-lucide="calendar"></i>
                         <h4>Caderno de Ações 2024</h4>
-                        <button onclick="window.open('pdfs/_Caderno de Ações_Março_Maio2025.pdf', '_blank')">Abrir PDF</button>
+                        <button onclick="window.open('pdfs/_Caderno de Ações_Março_Maio2025.pdf', '_blank')">Abrir
+                            PDF</button>
                     </div>
                     <div class="acao-item">
                         <i data-lucide="calendar"></i>
                         <h4>Caderno de Ações 2025</h4>
-                        <button onclick="window.open('pdfs/Caderno de Ações_Dez24eFev25.pdf', '_blank')">Abrir PDF</button>
+                        <button onclick="window.open('pdfs/Caderno de Ações_Dez24eFev25.pdf', '_blank')">Abrir
+                            PDF</button>
                     </div>
                 </div>
             </div>
         </div>
+
+        <div class="modal" id="processos-modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Mapeamento de Processos (BPM)</h3>
+                <button onclick="closeModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="acoes-grid">
+                    <div class="acao-item">
+                        <i data-lucide="file-text"></i>
+                        <h4>Nome do Processo 1</h4>
+                        <button onclick="window.open('pdfs/arquivo-do-processo-1.pdf', '_blank')">Abrir PDF</button>
+                    </div>
+
+                    <div class="acao-item">
+                        <i data-lucide="file-text"></i>
+                        <h4>Nome do Processo 2</h4>
+                        <button onclick="window.open('pdfs/arquivo-do-processo-2.pdf', '_blank')">Abrir PDF</button>
+                    </div>
+
+                    <div class="acao-item">
+                        <i data-lucide="file-text"></i>
+                        <h4>Nome do Processo 3</h4>
+                        <button onclick="window.open('pdfs/arquivo-do-processo-3.pdf', '_blank')">Abrir PDF</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
     </div>
 
     <!-- Sidebar Toggle Button -->

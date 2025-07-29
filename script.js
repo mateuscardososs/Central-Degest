@@ -317,13 +317,46 @@ async function initJiraKanban() {
     sidebarContent.innerHTML = `<div class="loader">Carregando quadro Kanban...</div>`;
 
     try {
+
         const response = await fetch(`/api/jira-board?id=${JIRA_BOARD_ID}`);
+
+        alert("passo1")
+
         if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Falha ao carregar o quadro');
+            alert("responseOK");
+
+            let errorMessage = 'Falha ao carregar o quadro';
+
+            const contentType = response.headers.get("content-type");
+
+            if (contentType && contentType.includes("application/json")) {
+                const errorData = await response.json();
+                errorMessage = errorData.message || errorMessage;
+            } else {
+                const errorText = await response.text();
+                errorMessage = errorText || errorMessage;
+            }
+
+            throw new Error(errorMessage);
         }
+
+
+
+        // if (!response.ok) {
+        //     alert("responseOK")        
+        //     const errorData = await response.json();
+        //     throw new Error(errorData.message || 'Falha ao carregar o quadro');
+
+        // }
+
+
         const boardData = await response.json();
+
+
         renderJiraKanban(boardData);
+
+
+
     } catch (error) {
         console.error("Erro ao carregar o quadro do Jira:", error);
         sidebarContent.innerHTML = `<div class="error-message">Erro ao carregar o quadro: ${error.message}</div>`;

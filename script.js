@@ -48,13 +48,13 @@ const folders = [
     },
     {
         name: "Gestão de Riscos",
-        description: "Identificação e mitigação de riscos",
+        description: "Mapeamento de riscos e elaboração de planos para sua mitigação.",
         icon: "shield",
         url: `${SHAREPOINT_BASE_URL}?id=%2Fsites%2Fgestaoestrategicagovernanca%2FDocumentos%20Compartilhados%2F_Gest%C3%A3o%20de%20Riscos&viewid=16e11edd-470d-455d-8dcf-db8a5cbe741d`
     },
     {
         name: "Planejamento Estratégico",
-        description: "Planos e estratégias organizacionais",
+        description: "Definição de estratégias e diretrizes para o direcionamento da organização.",
         icon: "target",
         url: `${SHAREPOINT_BASE_URL}?id=%2Fsites%2Fgestaoestrategicagovernanca%2FDocumentos%20Compartilhados%2F_Planejamento%20Estrat%C3%A9gico&viewid=16e11edd-470d-455d-8dcf-db8a5cbe741d`
     },
@@ -72,7 +72,7 @@ const folders = [
     },
     {
         name: "Documentos Importantes",
-        description: "Documentos críticos e de referência",
+        description: "Central de documentos críticos e materiais de consulta para a equipe",
         icon: "file-stack",
         url: `${SHAREPOINT_BASE_URL}?id=%2Fsites%2Fgestaoestrategicagovernanca%2FDocumentos%20Compartilhados%2FDocumentos%20importantes&viewid=16e11edd-470d-455d-8dcf-db8a5cbe741d`
     },
@@ -90,7 +90,7 @@ const folders = [
     },
     {
         name: "Relatórios",
-        description: "Relatórios gerenciais e analíticos",
+        description: "Relatórios para acompanhamento de desempenho e resultados",
         icon: "line-chart",
         url: `${SHAREPOINT_BASE_URL}?id=%2Fsites%2Fgestaoestrategicagovernanca%2FDocumentos%20Compartilhados%2FRelat%C3%B3rios&viewid=16e11edd-470d-455d-8dcf-db8a5cbe741d`
     },
@@ -102,7 +102,7 @@ const folders = [
     },
     {
         name: "DEGEST",
-        description: "Planilha principal do departamento",
+        description: "Planilha central para controle e gestão das atividades do departamento",
         icon: "file-spreadsheet",
         url: `https://trfcinco.sharepoint.com/:x:/r/sites/gestaoestrategicagovernanca/_layouts/15/Doc.aspx?sourcedoc=%7BC09384E7-0FED-4506-938C-83F1948EF152%7D&file=DGEST.xlsx&action=default&mobileredirect=true`
     }
@@ -130,8 +130,8 @@ function renderFolders() {
 // SEÇÃO DE EVENTOS DA EQUIPE (CARREGAMENTO AUTOMÁTICO)
 // =================================================================================
 
-const BIRTHDAYS_FILE_PATH = 'Aniversariantes.xlsx';
-const VACATIONS_FILE_PATH = 'Pasta1.xlsx';
+const BIRTHDAYS_FILE_PATH = '/excel/Aniversariantes.xlsx';
+const VACATIONS_FILE_PATH = '/excel/FeriasEquipeAntes.xlsx';
 
 /**
  * LÓGICA FINAL: Encontra o próximo aniversário lendo TODAS as colunas.
@@ -175,33 +175,55 @@ function findNextBirthday(data) {
  */
 function findNextVacation(data) {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0); // Zera o horário para comparar apenas os dias
+
     const futureVacations = [];
 
+    // Itera sobre cada LINHA (objeto) da planilha
     data.forEach(row => {
-        Object.values(row).forEach(entry => {
-            if (typeof entry !== 'string') return;
+        // Pega os dados diretamente das colunas "Nome" e "Início"
+        const name = row.Nome;
+        const startDateValue = row.Início; // O valor pode ser uma string ou número de data do Excel
 
-            const match = entry.match(/^(.+?)\s+(\d{1,2}\/\d{1,2})\s*-\s*(\d{1,2}\/\d{1,2})$/);
-            if (!match) return;
+        // Se não houver nome ou data de início, pula esta linha
+        if (!name || !startDateValue) {
+            return;
+        }
 
-            const name = match[1].trim();
-            const startStr = match[2];
-            const [startDay, startMonth] = startStr.split('/').map(n => parseInt(n));
+        let eventDate;
+        
+        // A biblioteca SheetJS pode ler a data como um número ou como texto.
+        // O código abaixo tenta lidar com ambos os casos.
+        if (typeof startDateValue === 'number') {
+            // Converte o número de série de data do Excel para uma data JavaScript
+            // O '25569' é o offset entre as datas do Excel (1900) e do Unix (1970)
+            eventDate = new Date((startDateValue - 25569) * 86400 * 1000);
+        } else if (typeof startDateValue === 'string') {
+            const parts = startDateValue.split('/');
+            // Formato esperado M/D/AAAA
+            const month = parseInt(parts[0], 10) - 1; 
+            const day = parseInt(parts[1], 10);
+            const year = parseInt(parts[2], 10);
+            eventDate = new Date(year, month, day);
+        }
 
-            if (isNaN(startDay) || isNaN(startMonth)) return;
+        // Se a data não for válida ou já passou, ignora
+        if (!eventDate || isNaN(eventDate.getTime()) || eventDate < today) {
+            return;
+        }
 
-            let eventDate = new Date(today.getFullYear(), startMonth - 1, startDay);
-            if (eventDate < today) {
-                eventDate.setFullYear(today.getFullYear() + 1);
-            }
-            
-            futureVacations.push({ name, date: eventDate });
-        });
+        // Adiciona as férias válidas à lista
+        futureVacations.push({ name, date: eventDate });
     });
 
-    if (futureVacations.length === 0) return null;
+    if (futureVacations.length === 0) {
+        return null; // Nenhuma férias futura encontrada
+    }
+
+    // Ordena para encontrar a data mais próxima
     futureVacations.sort((a, b) => a.date - b.date);
+
+    // Retorna a primeira da lista (a mais próxima)
     return futureVacations[0];
 }
 

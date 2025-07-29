@@ -153,14 +153,14 @@ function findNextBirthday(data) {
             const name = match[1].trim();
             const dateStr = match[2];
             const [day, month] = dateStr.split('/').map(n => parseInt(n));
-            
+
             if (isNaN(day) || isNaN(month)) return;
 
             let eventDate = new Date(today.getFullYear(), month - 1, day);
             if (eventDate < today) {
                 eventDate.setFullYear(today.getFullYear() + 1);
             }
-            
+
             futureEvents.push({ name, date: eventDate });
         });
     });
@@ -191,7 +191,7 @@ function findNextVacation(data) {
         }
 
         let eventDate;
-        
+
         // A biblioteca SheetJS pode ler a data como um número ou como texto.
         // O código abaixo tenta lidar com ambos os casos.
         if (typeof startDateValue === 'number') {
@@ -201,7 +201,7 @@ function findNextVacation(data) {
         } else if (typeof startDateValue === 'string') {
             const parts = startDateValue.split('/');
             // Formato esperado M/D/AAAA
-            const month = parseInt(parts[0], 10) - 1; 
+            const month = parseInt(parts[0], 10) - 1;
             const day = parseInt(parts[1], 10);
             const year = parseInt(parts[2], 10);
             eventDate = new Date(year, month, day);
@@ -231,7 +231,7 @@ function findNextVacation(data) {
 async function loadAndProcessFiles() {
     const summaryElement = document.getElementById('teamSummary');
     if (!summaryElement) return;
-    
+
     try {
         const responses = await Promise.all([
             fetch(BIRTHDAYS_FILE_PATH),
@@ -252,7 +252,7 @@ async function loadAndProcessFiles() {
 
         const birthdayData = XLSX.utils.sheet_to_json(birthdayWb.Sheets[birthdayWb.SheetNames[0]]);
         const vacationData = XLSX.utils.sheet_to_json(vacationWb.Sheets[vacationWb.SheetNames[0]]);
-        
+
         updateTeamSummary(birthdayData, vacationData);
     } catch (error) {
         console.error("Erro ao carregar ou processar as planilhas:", error);
@@ -304,6 +304,61 @@ function updateTeamSummary(birthdayData, vacationData) {
 }
 
 // =================================================================================
+// SEÇÃO DO QUADRO KANBAN DO JIRA
+// =================================================================================
+
+const JIRA_BOARD_ID = '5'; // <-- COLOQUE O ID DO SEU QUADRO AQUI
+
+// Função principal para iniciar o carregamento do Kanban
+async function initJiraKanban() {
+    const sidebarContent = document.getElementById('sidebarContent');
+    if (!sidebarContent) return;
+
+    sidebarContent.innerHTML = `<div class="loader">Carregando quadro Kanban...</div>`;
+
+    try {
+        const response = await fetch(`/api/jira-board?id=${JIRA_BOARD_ID}`);
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Falha ao carregar o quadro');
+        }
+        const boardData = await response.json();
+        renderJiraKanban(boardData);
+    } catch (error) {
+        console.error("Erro ao carregar o quadro do Jira:", error);
+        sidebarContent.innerHTML = `<div class="error-message">Erro ao carregar o quadro: ${error.message}</div>`;
+    }
+}
+
+// Função para renderizar o HTML do quadro Kanban
+function renderJiraKanban(boardData) {
+    const sidebarContent = document.getElementById('sidebarContent');
+    if (!sidebarContent) return;
+
+    let boardHTML = `<h3>Quadro Kanban</h3><div class="kanban-board">`;
+
+    boardData.forEach(column => {
+        boardHTML += `
+            <div class="kanban-column">
+                <h4 class="kanban-column-title">${column.name} (${column.issues.length})</h4>
+                <div class="kanban-card-list">
+                    ${column.issues.map(issue => `
+                        <div class="kanban-card">
+                            <p class="kanban-card-summary">${issue.summary}</p>
+                            <span class="kanban-card-key">${issue.key}</span>
+                        </div>
+                    `).join('')}
+                    ${column.issues.length === 0 ? `<p class="kanban-no-issues">Nenhuma issue</p>` : ''}
+                </div>
+            </div>
+        `;
+    });
+
+    boardHTML += `</div>`;
+    sidebarContent.innerHTML = boardHTML;
+}
+
+// =================================================================================
 // FUNÇÕES GERAIS DA INTERFACE (FILTRO, MODAL, SIDEBAR, TEMA, ETC.)
 // =================================================================================
 
@@ -344,10 +399,19 @@ function closeModal() {
     }
 }
 
+// Variável para controlar se o Jira já foi carregado
+let jiraLoaded = false;
+
 function toggleSidebar() {
     const sidebar = document.getElementById('sidebar');
     if (sidebar) {
         sidebar.classList.toggle('active');
+
+        // Se a sidebar está sendo aberta e o Jira ainda não foi carregado
+        if (sidebar.classList.contains('active') && !jiraLoaded) {
+            initJiraKanban(); // Chama a função para carregar os dados
+            jiraLoaded = true; // Marca como carregado para não chamar de novo
+        }
     }
 }
 
@@ -392,7 +456,7 @@ function loadTheme() {
     }
 }
 
-document.addEventListener('keydown', function(e) {
+document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape') {
         closeModal();
         const sidebar = document.getElementById('sidebar');
@@ -402,7 +466,7 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     const sidebar = document.getElementById('sidebar');
     const sidebarTrigger = document.querySelector('.sidebar-trigger');
     if (sidebar && sidebar.classList.contains('active') && !sidebar.contains(e.target) && sidebarTrigger && !sidebarTrigger.contains(e.target)) {
@@ -436,7 +500,7 @@ function updateDateTime() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     loadTheme();
     renderFolders();
     loadAndProcessFiles();
@@ -458,7 +522,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
+    window.addEventListener('load', function () {
         navigator.serviceWorker.register('/sw.js')
             .then(reg => console.log('ServiceWorker registration successful.'))
             .catch(err => console.log('ServiceWorker registration failed:', err));
@@ -488,3 +552,4 @@ style.textContent = `
     .fade-in { animation: fadeIn 0.6s ease-in-out; }
 `;
 document.head.appendChild(style);
+

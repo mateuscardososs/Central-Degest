@@ -198,19 +198,7 @@
                 <i data-lucide="x"></i>
             </button>
         </div>
-        <div class="sidebar-content">
-            <iframe src="https://trf5.atlassian.net/jira/core/projects/DAS" frameborder="0" width="100%" height="100%">
-            </iframe>
-
-
-            <div class="jira-fallback">
-                <p>O Kanban pode não carregar aqui. Acesse diretamente pelo botão:</p>
-                <button class="btn-primary"
-                    onclick="window.open('https:trf5.atlassian.net/jira/core/projects/DAS/board?filter=assignee+%3D+%22712020%3Afe527b71-5827-406c-aeb3-be5efb9966bc%22&groupBy=status&atlOrigin=eyJpIjoiNDJmZTQxMDg2MmQ3NDAxYWFhODBiNDVkYzFiYjBjYWYiLCJwIjoiaiJ9', '_blank')">
-                    <i data-lucide="external-link"></i>
-                    Abrir Kanban no Jira
-                </button>
-            </div>
+        <div class="sidebar-content" id="sidebarContent">
         </div>
     </aside>
 
@@ -365,7 +353,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
 
     <!-- Sidebar Toggle Button -->

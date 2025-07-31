@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Central de Conhecimento - DEGEST</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/lucide@latest/dist/umd/lucide.js" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <!-- Substitui o ícone e nome por uma imagem de logo -->
+                    <img src="img/logo azul.png" alt="Logo DEGEST" class="logo-img" />
+                </div>
+                <h1 class="header-title">Central de Conhecimento</h1>
+                <div class="header-actions">
+                    <button class="header-btn" onclick="toggleTheme()">
+                        <i data-lucide="moon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" data-aos="fade-up">
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="hero-title">Bem-vindo à Central de Conhecimento da DEGEST</h2>
+                <p class="hero-subtitle">
+                    Divisão de Gestão Estratégica e Governança - Seu hub centralizado para documentos institucionais,
+                    equipes, processos e ferramentas de trabalho.
+                </p>
+                <button class="hero-btn" onclick="scrollToSection('quick-access')">
+                    <span>Explore</span>
+                    <i data-lucide="arrow-down"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cards Institucionais -->
+    <section class="institutional-cards" data-aos="fade-up" data-aos-delay="100">
+        <div class="container">
+            <h3 class="section-title">Informações Institucionais</h3>
+            <div class="cards-grid">
+
+                <div class="card" onclick="openModal('equipe-modal')">
+                    <div class="card-icon">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h4>Sobre a Equipe DEGEST</h4>
+                    <p>Conheça nossa equipe e estrutura</p>
+                </div>
+
+                <div class="card" onclick="openModal('organograma-modal')">
+                    <div class="card-icon">
+                        <i data-lucide="network"></i>
+                    </div>
+                    <h4>Organograma</h4>
+                    <p>Visualize a estrutura hierárquica</p>
+                </div>
+
+                <div class="card" onclick="openModal('sobre-modal')">
+                    <div class="card-icon">
+                        <i data-lucide="info"></i>
+                    </div>
+                    <h4>Sobre a Página</h4>
+                    <p>Entenda como navegar nesta central</p>
+                </div>
+
+                <div class="card" onclick="openModal('acoes-modal')">
+                    <div class="card-icon">
+                        <i data-lucide="book-open"></i>
+                    </div>
+                    <h4>Caderno de Ações</h4>
+                    <p>Acesse os documentos trimestrais</p>
+                </div>
+
+                <div class="card" onclick="openModal('processos-modal')">
+                    <div class="card-icon">
+                        <i data-lucide="workflow"></i>
+                    </div>
+                    <h4>Mapeamento de Processos</h4>
+                    <p>Acesse os fluxos e manuais BPM</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Acesso Rápido SharePoint -->
+    <section class="quick-access" id="quick-access" data-aos="fade-up" data-aos-delay="200">
+        <div class="container">
+            <h3 class="section-title">Acesso Rápido às Áreas da DEGEST</h3>
+
+            <div class="search-container">
+                <div class="search-box">
+                    <!-- Campo de busca sem ícone -->
+                    <input type="text" id="searchInput" placeholder="Buscar por área, documento ou processo..."
+                        oninput="filterFolders()">
+                </div>
+            </div>
+
+            <div class="folders-grid" id="foldersGrid">
+                <!-- Folders serão inseridos via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Agenda -->
+    <section class="agenda" data-aos="fade-up" data-aos-delay="300">
+        <div class="container">
+            <h3 class="section-title">Agenda de Reuniões e Eventos</h3>
+            <div class="agenda-content">
+                <div class="calendar-embed">
+
+                    <iframe
+                        src="https://outlook.office365.com/owa/calendar/b5f71e2998eb4dbd9e4883c0ca7860bd@trf5.jus.br/664b5f92e6554806a82dc8426d59fd8b4549914737536271799/calendar.html"
+                        frameborder="0" scrolling="no" style="border: 0; width: 100%; height: 600px;">
+                    </iframe>
+
+                    <div class="calendar-fallback">
+                        <p>Caso o calendário não carregue, acesse diretamente:</p>
+                        <button class="btn-secondary"
+                            onclick="window.open('https://outlook.office365.com/owa/calendar/b5f71e2998eb4dbd9e4883c0ca7860bd@trf5.jus.br/664b5f92e6554806a82dc8426d59fd8b4549914737536271799/calendar.html', '_blank')">
+                            <i data-lucide="external-link"></i>
+                            Abrir Calendário
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destaques Semanais -->
+    <section class="highlights" data-aos="fade-up" data-aos-delay="400">
+        <div class="container">
+            <h3 class="section-title">Destaques</h3>
+            <div class="highlights-grid">
+                <div class="highlight-card primary">
+                    <div class="highlight-icon">
+                        <i data-lucide="calendar"></i>
+                    </div>
+                    <h4>Reuniões Semanais</h4>
+                    <p>Segundas-feiras às 14h</p>
+                    <span class="highlight-badge">Semanal</span>
+                </div>
+
+                <div class="highlight-card secondary">
+                    <div class="highlight-icon">
+                        <i data-lucide="target"></i>
+                    </div>
+                    <h4>Reuniões com BI</h4>
+                    <p>Quintas-feiras às 15h</p>
+                    <span class="highlight-badge">Semanal</span>
+                </div>
+
+                <div class="highlight-card accent">
+                    <div class="highlight-icon">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <h4>Capacitações dos estagiarios</h4>
+                    <p>Conforme agenda mensal</p>
+                    <span class="highlight-badge">Mensal</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nossa Equipe -->
+    <section class="team" data-aos="fade-up" data-aos-delay="500">
+        <div class="container">
+            <h3 class="section-title">Próximos Eventos da Equipe</h3>
+
+            <div id="teamSummary" class="team-summary-grid">
+                <p>Carregando dados da equipe...</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sidebar Jira -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h4>Tarefas em Andamento</h4>
+            <button class="sidebar-toggle" onclick="toggleSidebar()"><i data-lucide="x"></i></button>
+        </div>
+        <div class="sidebar-content">
+            <!-- Este é o container que o script.js procura -->
+            <div id="jira-tasks-container">
+                <p>Carregando tarefas...</p>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-toggle" onclick="toggleChatbot()" id="chatbotToggle">
+            <i data-lucide="bot"></i>
+        </button>
+        <div class="chatbot-popup" id="chatbotPopup">
+            <div class="chatbot-header">
+                <h4>Assistente DEGEST</h4>
+                <button onclick="toggleChatbot()">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+            <div class="chatbot-content">
+                <iframe src="https://team-bot-tau.vercel.app/#chat" frameborder="0" width="100%" height="400">
+                </iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h4>DEGEST – Gestão Estratégica e Governança</h4>
+                    <p>Desenvolvido por Mateus Cardoso</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#" onclick="openModal('contato-modal')">Contato</a>
+                    <a href="#" onclick="openModal('suporte-modal')">Suporte</a>
+                    <a href="#" onclick="scrollToTop()">Voltar ao Topo</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
+        <!-- Equipe Modal -->
+        <div class="modal" id="equipe-modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Sobre a Equipe DEGEST</h3>
+                <button onclick="closeModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="modal-text">
+                    <p>A DEGEST - Divisão de Gestão Estratégica e Governança é responsável por coordenar as atividades
+                        de planejamento estratégico, governança corporativa e gestão de processos institucionais.</p>
+                    <h4>Nossa Missão</h4>
+                    <p>Promover a excelência na gestão através de processos eficientes, governança transparente e
+                        planejamento estratégico alinhado aos objetivos institucionais.</p>
+                    <h4>Nossas Responsabilidades</h4>
+                    <ul>
+                        <li>Coordenação do planejamento estratégico institucional</li>
+                        <li>Gestão de processos e melhoria contínua</li>
+                        <li>Governança corporativa e compliance</li>
+                        <li>Monitoramento de indicadores de desempenho</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Organograma Modal -->
+        <div class="modal" id="organograma-modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Organograma</h3>
+                <button onclick="closeModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-content">
+                <!-- Exibe a imagem do organograma. Substitua organograma.png pelo arquivo real se necessário -->
+                <img src="img/OrganogramaDEGEST.jpg" alt="Organograma DEGEST" class="organograma-img" />
+            </div>
+        </div>
+
+        <!-- Sobre Modal -->
+        <div class="modal" id="sobre-modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Sobre esta Página</h3>
+                <button onclick="closeModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="modal-text">
+                    <h4>Como Navegar</h4>
+                    <p>Esta central foi desenvolvida para facilitar o acesso a informações e recursos da DEGEST:</p>
+                    <ul>
+                        <li><strong>Acesso Rápido:</strong> Use a busca para encontrar documentos específicos</li>
+                        <li><strong>Agenda:</strong> Visualize reuniões e eventos próximos</li>
+                        <li><strong>Equipe:</strong> Informações sobre aniversários e férias</li>
+                        <li><strong>Jira:</strong> Acompanhe tarefas em andamento na sidebar</li>
+                        <li><strong>Chatbot:</strong> Obtenha ajuda rápida no canto inferior direito</li>
+                    </ul>
+                    <h4>Recursos Disponíveis</h4>
+                    <p>Todos os links direcionam para as pastas corretas do SharePoint, garantindo acesso direto aos
+                        documentos necessários.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ações Modal -->
+        <div class="modal" id="acoes-modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Caderno de Ações</h3>
+                <button onclick="closeModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="acoes-grid">
+                    <!-- Apenas duas opções de caderno de ações: 2024 e 2025 -->
+                    <div class="acao-item">
+                        <i data-lucide="calendar"></i>
+                        <h4>Caderno de Ações 2024</h4>
+                        <button onclick="window.open('pdfs/_Caderno de Ações_Março_Maio2025.pdf', '_blank')">Abrir
+                            PDF</button>
+                    </div>
+                    <div class="acao-item">
+                        <i data-lucide="calendar"></i>
+                        <h4>Caderno de Ações 2025</h4>
+                        <button onclick="window.open('pdfs/Caderno de Ações_Dez24eFev25.pdf', '_blank')">Abrir
+                            PDF</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="processos-modal" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Mapeamento de Processos (BPM)</h3>
+                <button onclick="closeModal()"><i data-lucide="x"></i></button>
+            </div>
+            <div class="modal-content">
+                <div class="acoes-grid">
+                    <div class="acao-item">
+                        <i data-lucide="file-text"></i>
+                        <h4>Nome do Processo 1</h4>
+                        <button onclick="window.open('pdfs/arquivo-do-processo-1.pdf', '_blank')">Abrir PDF</button>
+                    </div>
+
+                    <div class="acao-item">
+                        <i data-lucide="file-text"></i>
+                        <h4>Nome do Processo 2</h4>
+                        <button onclick="window.open('pdfs/arquivo-do-processo-2.pdf', '_blank')">Abrir PDF</button>
+                    </div>
+
+                    <div class="acao-item">
+                        <i data-lucide="file-text"></i>
+                        <h4>Nome do Processo 3</h4>
+                        <button onclick="window.open('pdfs/arquivo-do-processo-3.pdf', '_blank')">Abrir PDF</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Sidebar Toggle Button -->
+    <button class="sidebar-trigger" onclick="toggleSidebar()" title="Abrir Tarefas Jira">
+        <i data-lucide="list-todo"></i>
+    </button>
+
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <!-- Biblioteca para ler arquivos Excel (SheetJS) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>

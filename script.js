@@ -295,7 +295,7 @@ async function fetchJiraTasks() {
     container.innerHTML = `<p>Carregando tarefas...</p>`;
 
     try {
-        const response = await fetch('/api/get-jira-tasks');
+        const response = await fetch('https://central-degest-api.onrender.com/api/get-jira-tasks');
         if (!response.ok) {
             throw new Error(`Erro na comunicação com o servidor: ${response.statusText}`);
         }
